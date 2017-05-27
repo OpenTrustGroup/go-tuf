@@ -11,9 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/docker/docker/pkg/term"
-	"github.com/flynn/go-docopt"
-	"github.com/flynn/go-tuf"
+	docopt "github.com/flynn/go-docopt"
+	tuf "github.com/flynn/go-tuf"
 	"github.com/flynn/go-tuf/util"
 )
 
@@ -126,13 +125,6 @@ func getPassphrase(role string, confirm bool) ([]byte, error) {
 	if pass := os.Getenv(fmt.Sprintf("TUF_%s_PASSPHRASE", strings.ToUpper(role))); pass != "" {
 		return []byte(pass), nil
 	}
-
-	state, err := term.SaveState(0)
-	if err != nil {
-		return nil, err
-	}
-	term.DisableEcho(0, state)
-	defer term.RestoreTerminal(0, state)
 
 	stdin := bufio.NewReader(os.Stdin)
 
